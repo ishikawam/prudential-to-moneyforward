@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+
+  php:
+    build: docker/php
+    volumes:
+      - .:/var/www/laravel:cached
+    working_dir: /var/www/laravel
+    environment:
+# Laravelの.envはAPP_KEYのみにして、他はここで指定する
+      - APP_NAME=prudential-to-moneyforward (local)
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - CACHE_DRIVER=file
+      - SESSION_LIFETIME=1
