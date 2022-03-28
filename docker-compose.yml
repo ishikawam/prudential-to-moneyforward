@@ -14,3 +14,11 @@ services:
       - APP_DEBUG=true
       - CACHE_DRIVER=file
       - SESSION_LIFETIME=1
+
+  selenium:
+    image: selenium/standalone-chrome-debug
+    # デフォルトパスワード secret
+    ports:
+      - 15910:5900
+    volumes:
+      - /dev/shm:/dev/shm

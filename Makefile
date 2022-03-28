@@ -56,6 +56,9 @@ down:
 php:
 	docker-compose exec php sh
 
+selenium:
+# password 'secret'
+	open vnc://localhost:15910
 
 
 migrate:
@@ -81,6 +84,9 @@ dev:
 
 open:
 	open http://localhost:
+
+test:
+	docker-compose exec php php artisan test
 
 # cs-fixer
 fix-diff:
