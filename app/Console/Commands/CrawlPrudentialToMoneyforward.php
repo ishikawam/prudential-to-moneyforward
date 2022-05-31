@@ -23,7 +23,7 @@ class CrawlPrudentialToMoneyforward extends Command
      */
     protected $description = 'プルデンシャル生命保険のサイトをスクレイピングして取得した情報をマネーフォワードに登録';
 
-    private const INTERVAL = 500 * 1000;
+    private const INTERVAL = 500 * 1000;  // prudentialは相当重い
 
     private $currentGroup;  // Money Forwardのグループを控えておいて戻す
 
@@ -230,6 +230,7 @@ class CrawlPrudentialToMoneyforward extends Command
         // 解約返戻金の照会
         $this->driver->findElement(WebDriverBy::id('G01HR01'))->click();
         usleep(self::INTERVAL);
+        usleep(self::INTERVAL);  // 重い
 
         $elements = $this->driver->findElements(WebDriverBy::cssSelector('.main-contents-inner .box-01'));
         $arr = array_map(function ($element) {
@@ -251,6 +252,9 @@ class CrawlPrudentialToMoneyforward extends Command
         // ドル換算
         $element = $this->driver->findElement(WebDriverBy::id('rateDisplayType'));
         $rateYenDollar = preg_match('/\$1：￥(.+)$/', $element->getText(), $out) ? $out[1] : null;
+        if (empty($rateYenDollar)) {
+            throw new \RuntimeException('ドル換算が取得できない');
+        }
         $this->info(sprintf('rateYenDollar: %s', number_format($rateYenDollar, 2)));
 
         // 出力
