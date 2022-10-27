@@ -23,7 +23,7 @@ class CrawlPrudentialToMoneyforward extends Command
      */
     protected $description = 'プルデンシャル生命保険のサイトをスクレイピングして取得した情報をマネーフォワードに登録';
 
-    private const INTERVAL = 500 * 1000;  // prudentialは相当重い
+    private const INTERVAL = 500 * 1000;  // prudentialは相当重い 0.5s
 
     private $currentGroup;  // Money Forwardのグループを控えておいて戻す
 
@@ -202,7 +202,7 @@ class CrawlPrudentialToMoneyforward extends Command
 
             // 自前wait
             $isTimeout = true;
-            for ($i = 0; $i < (5*1000*1000) / self::INTERVAL; $i ++) {
+            for ($i = 0; $i < 10; $i ++) {
                 // ログアウト導線があればログイン成功
                 try {
                     $this->driver->findElement(WebDriverBy::id('logout-button'));
@@ -216,10 +216,17 @@ class CrawlPrudentialToMoneyforward extends Command
                     $this->warn($element->getText());
                     $isTimeout = false;
                     break;
-                } catch (\Facebook\WebDriver\Exception\NoSuchElementException $e) {
+                } catch (\Facebook\WebDriver\Exception\NoSuchElementException $d) {
                 }
 
-                usleep(self::INTERVAL);
+                // アンケート
+                try {
+                    $this->driver->findElement(WebDriverBy::id('clickTop'))->click();
+                    $this->warn('アンケート');
+                } catch (\Facebook\WebDriver\Exception\NoSuchElementException $d) {
+                }
+
+                usleep(self::INTERVAL * 10);
             }
             if ($isTimeout) {
                 throw $e;
@@ -250,6 +257,9 @@ class CrawlPrudentialToMoneyforward extends Command
         }));
 
         // ドル換算
+        $this->driver->wait()->until(
+            WebDriverExpectedCondition::elementToBeClickable(WebDriverBy::id('rateDisplayType'))
+        );
         $element = $this->driver->findElement(WebDriverBy::id('rateDisplayType'));
         $rateYenDollar = preg_match('/\$1：￥(.+)$/', $element->getText(), $out) ? $out[1] : null;
         if (empty($rateYenDollar)) {
@@ -504,7 +514,7 @@ class CrawlPrudentialToMoneyforward extends Command
 
             // 自前wait このページは同じIDとかnameとかの要素が多数ある。ので$td[0]内で探すため通常のwaitできない
             $isTimeout = true;
-            for ($i = 0; $i < (5*1000*1000) / self::INTERVAL; $i ++) {
+            for ($i = 0; $i < 10; $i ++) {
                 try {
                     $element = $td[0]->findElement(WebDriverBy::name('user_asset_det[value]'));
                     $isTimeout = false;
