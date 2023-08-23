@@ -10,4 +10,8 @@ COPY ./default.ini /usr/local/etc/php/conf.d/default.ini
 
 # zip for web-driver
 RUN apk add --no-cache --update libzip-dev \
+    autoconf gcc g++ make linux-headers \
     && docker-php-ext-install zip
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
