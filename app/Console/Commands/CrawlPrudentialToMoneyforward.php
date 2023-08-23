@@ -219,10 +219,19 @@ class CrawlPrudentialToMoneyforward extends Command
                 } catch (\Facebook\WebDriver\Exception\NoSuchElementException $d) {
                 }
 
+                // # ダイアログエラー
+
                 // アンケート
                 try {
                     $this->driver->findElement(WebDriverBy::id('clickTop'))->click();
                     $this->warn('アンケート');
+                } catch (\Facebook\WebDriver\Exception\NoSuchElementException $d) {
+                }
+
+                // ご利用中の端末の登録
+                try {
+                    $this->driver->findElement(WebDriverBy::className('btn-02'))->click();
+                    $this->warn('ご利用中の端末の登録');
                 } catch (\Facebook\WebDriver\Exception\NoSuchElementException $d) {
                 }
 
