@@ -13,7 +13,7 @@ services:
       - SESSION_LIFETIME=1
 
   selenium:
-    image: selenium/standalone-chrome:latest
+    image: seleniarm/standalone-chromium:latest
     ports:
       - "15910:7900"
     volumes:

@@ -7,6 +7,9 @@ prudential-to-moneyforward
 
 * npm node
 * docker
+* **Apple Silicon Mac (M1/M2/M3等) 専用**
+  * Intel Macで使用する場合は`compose.yaml`のSeleniumイメージを変更してください
+  * `seleniarm/standalone-chromium:latest` → `selenium/standalone-chromium:latest`
 
 ## Install
 

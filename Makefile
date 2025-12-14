@@ -49,9 +49,8 @@ down: ## Dockerコンテナ停止
 php: ## PHPコンテナにシェル接続
 	docker compose exec php sh
 
-selenium: ## SeleniumコンテナにVNC接続
-# password 'secret'
-	open vnc://localhost:15910
+selenium: ## SeleniumコンテナにnoVNC接続
+	open http://localhost:15910
 
 logs: ## Dockerコンテナのログをtail表示
 	docker compose logs -f
