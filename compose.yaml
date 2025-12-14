@@ -1,7 +1,4 @@
-version: "3.8"
-
 services:
-
   php:
     build: docker/php
     volumes:
@@ -16,9 +13,13 @@ services:
       - SESSION_LIFETIME=1
 
   selenium:
-    image: selenium/standalone-chrome-debug
-    # デフォルトパスワード secret
+    image: seleniarm/standalone-chromium:latest
     ports:
-      - 15910:5900
+      - "15910:7900"
     volumes:
       - /dev/shm:/dev/shm
+    environment:
+      - SE_VNC_NO_PASSWORD=1
+      - SE_SCREEN_WIDTH=1920
+      - SE_SCREEN_HEIGHT=1080
+    shm_size: 2gb
